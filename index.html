@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Songho – Version distante</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header-left">
+        <div class="logo-wrap">
+          <div class="logo-circle">
+            <span class="logo-text-s">S</span>
+          </div>
+        </div>
+        <div class="title-block">
+          <span class="version-label">VERSION 2 DISTANTE</span>
+          <h1 class="game-title">Songho</h1>
+        </div>
+      </div>
+
+      <nav class="header-nav">
+        <button
+          class="nav-btn connexion-btn"
+          id="btnConnexion"
+          onclick="toggleConnexionPanel()"
+        >
+          <span class="nav-label">CONNEXION</span>
+          <span class="nav-value">Connecte</span>
+        </button>
+        <button class="nav-btn" onclick="showRegles()">Regles</button>
+        <button class="nav-btn" onclick="showPrise()">Prise</button>
+        <button class="nav-btn quit-btn" onclick="quitterPartie()">
+          Quitter
+        </button>
+      </nav>
+
+      <div class="header-right">
+        <span class="credit-label">REALISE PAR :</span>
+        <span class="credit-name">NDAHE EMMANUEL</span>
+        <span class="credit-univ">UNIVERSITE DE YAOUNDE 1</span>
+        <span class="credit-grade">LICENCE 2 – CAMEROUN</span>
+      </div>
+    </header>
+
+    <div class="connexion-panel" id="connexionPanel" style="display: none">
+      <div class="conn-section">
+        <h3>Créer une nouvelle partie</h3>
+        <button class="btn-primary" onclick="creerPartie()">Créer</button>
+      </div>
+      <div class="conn-divider"></div>
+      <div class="conn-section">
+        <h3>Rejoindre une partie</h3>
+        <div class="conn-row">
+          <input
+            type="text"
+            id="inputCode"
+            placeholder="Code de la partie"
+            maxlength="8"
+          />
+          <button class="btn-primary" onclick="rejoindrepartie()">
+            Rejoindre
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="status-bar">
+      <div class="status-cell">
+        <span class="status-label">CODE</span>
+        <div class="code-row">
+          <span class="status-value code-value" id="displayCode">–</span>
+          <button class="copy-btn" onclick="copyCode()" title="Copier le code">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" />
+              <path
+                d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="status-cell">
+        <span class="status-label">VOTRE CAMP</span>
+        <span class="status-value" id="displayCamp">–</span>
+      </div>
+      <div class="status-cell">
+        <span class="status-label">TOUR</span>
+        <span class="status-value" id="displayTour">–</span>
+      </div>
+      <div class="status-cell">
+        <span class="status-label">ETAT</span>
+        <span class="status-value" id="displayEtat">Attente</span>
+      </div>
+    </section>
+
+    <section class="adversaire-bar">
+      <div class="adv-label">Lien adversaire</div>
+      <div class="adv-row">
+        <input
+          type="password"
+          id="lienAdversaire"
+          class="adv-input"
+          readonly
+          placeholder="• • • • • • • • • • • • • • • •"
+        />
+        <button class="adv-btn" onclick="toggleLienVisible()" title="Afficher">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        </button>
+        <button class="adv-btn" onclick="copyLien()" title="Copier le lien">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+            />
+            <path
+              d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+            />
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="game-area">
+      <div class="score-panel score-nord" id="scoreNordPanel">
+        <div class="score-camp-label">Nord</div>
+        <div class="score-number" id="scoreNord">0</div>
+        <div class="score-unit">GRAINES</div>
+      </div>
+
+      <div class="board-wrap">
+        <div class="board" id="board">
+          <div class="board-row row-nord" id="rowNord">
+            <div
+              class="case case-nord"
+              id="caseN1"
+              onclick="jouerCoup('Nord', 0)"
+            >
+              <span class="case-count" id="cntN1">5</span>
+              <div class="grains-display" id="grainsN1"></div>
+              <span class="case-label">N1</span>
+            </div>
+            <div
+              class="case case-nord"
+              id="caseN2"
+              onclick="jouerCoup('Nord', 1)"
+            >
+              <span class="case-count" id="cntN2">5</span>
+              <div class="grains-display" id="grainsN2"></div>
+              <span class="case-label">N2</span>
+            </div>
+            <div
+              class="case case-nord"
+              id="caseN3"
+              onclick="jouerCoup('Nord', 2)"
+            >
+              <span class="case-count" id="cntN3">5</span>
+              <div class="grains-display" id="grainsN3"></div>
+              <span class="case-label">N3</span>
+            </div>
+            <div
+              class="case case-nord"
+              id="caseN4"
+              onclick="jouerCoup('Nord', 3)"
+            >
+              <span class="case-count" id="cntN4">5</span>
+              <div class="grains-display" id="grainsN4"></div>
+              <span class="case-label">N4</span>
+            </div>
+            <div
+              class="case case-nord"
+              id="caseN5"
+              onclick="jouerCoup('Nord', 4)"
+            >
+              <span class="case-count" id="cntN5">5</span>
+              <div class="grains-display" id="grainsN5"></div>
+              <span class="case-label">N5</span>
+            </div>
+            <div
+              class="case case-nord"
+              id="caseN6"
+              onclick="jouerCoup('Nord', 5)"
+            >
+              <span class="case-count" id="cntN6">5</span>
+              <div class="grains-display" id="grainsN6"></div>
+              <span class="case-label">N6</span>
+            </div>
+            <div
+              class="case case-nord"
+              id="caseN7"
+              onclick="jouerCoup('Nord', 6)"
+            >
+              <span class="case-count" id="cntN7">5</span>
+              <div class="grains-display" id="grainsN7"></div>
+              <span class="case-label">N7</span>
+            </div>
+          </div>
+
+          <div class="board-message" id="boardMessage">
+            En attente de l'adversaire
+          </div>
+
+          <div class="board-row row-sud" id="rowSud">
+            <div
+              class="case case-sud"
+              id="caseS7"
+              onclick="jouerCoup('Sud', 6)"
+            >
+              <span class="case-count" id="cntS7">5</span>
+              <div class="grains-display" id="grainsS7"></div>
+              <span class="case-label">S7</span>
+            </div>
+            <div
+              class="case case-sud"
+              id="caseS6"
+              onclick="jouerCoup('Sud', 5)"
+            >
+              <span class="case-count" id="cntS6">5</span>
+              <div class="grains-display" id="grainsS6"></div>
+              <span class="case-label">S6</span>
+            </div>
+            <div
+              class="case case-sud"
+              id="caseS5"
+              onclick="jouerCoup('Sud', 4)"
+            >
+              <span class="case-count" id="cntS5">5</span>
+              <div class="grains-display" id="grainsS5"></div>
+              <span class="case-label">S5</span>
+            </div>
+            <div
+              class="case case-sud"
+              id="caseS4"
+              onclick="jouerCoup('Sud', 3)"
+            >
+              <span class="case-count" id="cntS4">5</span>
+              <div class="grains-display" id="grainsS4"></div>
+              <span class="case-label">S4</span>
+            </div>
+            <div
+              class="case case-sud"
+              id="caseS3"
+              onclick="jouerCoup('Sud', 2)"
+            >
+              <span class="case-count" id="cntS3">5</span>
+              <div class="grains-display" id="grainsS3"></div>
+              <span class="case-label">S3</span>
+            </div>
+            <div
+              class="case case-sud"
+              id="caseS2"
+              onclick="jouerCoup('Sud', 1)"
+            >
+              <span class="case-count" id="cntS2">5</span>
+              <div class="grains-display" id="grainsS2"></div>
+              <span class="case-label">S2</span>
+            </div>
+            <div
+              class="case case-sud"
+              id="caseS1"
+              onclick="jouerCoup('Sud', 0)"
+            >
+              <span class="case-count" id="cntS1">5</span>
+              <div class="grains-display" id="grainsS1"></div>
+              <span class="case-label">S1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="score-panel score-sud" id="scoreSudPanel">
+        <div class="score-camp-label">Sud</div>
+        <div class="votre-camp-badge" id="votreCampBadge">VOTRE CAMP</div>
+        <div class="score-number score-number-sud" id="scoreSud">0</div>
+        <div class="score-unit">GRAINES</div>
+      </div>
+    </section>
+
+    <section class="bottom-bar">
+      <div class="last-coup-panel">
+        <div class="panel-label">DERNIER COUP</div>
+        <div class="last-coup-text" id="dernierCoup">–</div>
+      </div>
+      <div class="historique-panel">
+        <div class="panel-label">HISTORIQUE</div>
+        <ol class="historique-list" id="historique"></ol>
+      </div>
+    </section>
+
+    <div
+      class="modal-overlay"
+      id="modalRegles"
+      style="display: none"
+      onclick="closeModal('modalRegles')"
+    >
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal('modalRegles')">
+          ✕
+        </button>
+        <h2>Règles du jeu Songho</h2>
+        <div class="modal-body">
+          <h3>1. But du jeu</h3>
+          <p>
+            Le Songho se joue à 2 joueurs : Nord et Sud. Le joueur qui atteint
+            au moins <strong>40 graines</strong> capturées gagne la partie.
+          </p>
+          <h3>2. Tablier</h3>
+          <p>
+            Chaque joueur possède 7 cases. Au début, chaque case contient 5
+            graines (70 graines au total).
+          </p>
+          <h3>3. Tour de jeu</h3>
+          <p>
+            À son tour, un joueur choisit une case non vide de son camp. Il
+            prend toutes les graines et les sème une par une dans les cases
+            suivantes.
+          </p>
+          <h3>4. Conditions de prise</h3>
+          <ul>
+            <li>La dernière graine tombe dans le camp adverse</li>
+            <li>
+              La case finale contient exactement 2, 3 ou 4 graines après la
+              semaille
+            </li>
+            <li>La prise ne vide pas entièrement le camp adverse</li>
+          </ul>
+          <h3>5. Prise à la chaîne</h3>
+          <p>
+            Après une prise normale, on remonte vers la première case adverse.
+            Chaque case consécutive contenant 2, 3 ou 4 graines est capturée.
+          </p>
+          <h3>6. Fin de partie</h3>
+          <p>
+            La partie se termine si un joueur atteint 40 graines, s'il reste
+            moins de 10 graines sur le tablier, ou si aucun coup légal n'existe.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal-overlay"
+      id="modalPrise"
+      style="display: none"
+      onclick="closeModal('modalPrise')"
+    >
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal('modalPrise')">
+          ✕
+        </button>
+        <h2>Les prises</h2>
+        <div class="modal-body">
+          <h3>Prise normale</h3>
+          <p>
+            La dernière graine tombe dans le camp adverse sur une case contenant
+            <strong>2, 3 ou 4 graines</strong> → capture.
+          </p>
+          <h3>Prise à la chaîne</h3>
+          <p>
+            Après une prise, on continue en remontant vers la première case
+            adverse tant que les cases contiennent 2, 3 ou 4 graines.
+          </p>
+          <h3>Interdiction d'affamer</h3>
+          <p>
+            Une prise qui vide complètement le camp adverse est
+            <strong>annulée</strong>.
+          </p>
+          <h3>Grenier (&gt;13 graines)</h3>
+          <p>
+            Tour complet sans remettre dans la case source, puis distribution
+            uniquement dans le camp adverse.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalFin" style="display: none">
+      <div class="modal-box modal-fin">
+        <h2 id="finTitre">Fin de partie !</h2>
+        <div class="fin-scores">
+          <div class="fin-score-item">
+            <span class="fin-camp">Nord</span>
+            <span class="fin-val" id="finScoreNord">0</span>
+          </div>
+          <div class="fin-score-item">
+            <span class="fin-camp">Sud</span>
+            <span class="fin-val" id="finScoreSud">0</span>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="nouvellePartie()">
+          Nouvelle partie
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <script src="game.js"></script>
+  </body>
+</html>
